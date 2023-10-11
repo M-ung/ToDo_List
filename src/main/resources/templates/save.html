@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>save</title>
+    <script
+            src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+  <form action="/member/save" method="post">
+    이메일: <input type="text" name="memberEmail" id="memberEmail" onkeyup="emailCheck()"> <br>
+      <span id="check-result"></span> <br>
+    비밀번호: <input type="password" name="memberPassword"> <br>
+    이름: <input type="text" name="memberName"> <br>
+    <input type="submit" value="회원가입">
+  </form>
+</body>
+<script th:inline="javascript">
+    const emailCheck = () => {
+        const email = document.getElementById("memberEmail").value;
+        const checkResult = document.getElementById("check-result");
+        console.log("입력값: ", email)
+        $.ajax({
+            // 요청방식: post, url: "email-check", 데이터: 이메일 값
+            type: "post",
+            url: "/member/email-check",
+            data: {
+                "memberEmail": email
+            },
+            success: function(res) {
+                console.log("요청성공", res);
+                if (res == "ok") {
+                    console.log("사용 가능한 이메일");
+                    checkResult.style.color = "green";
+                    checkResult.innerHTML = "사용 가능한 이메일";
+                }
+                else {
+                    console.log("사용 불가능한 이메일");
+                    checkResult.style.color = "red";
+                    checkResult.innerHTML = "사용 불가능한 이메일";
+                }
+            },
+            error: function(err) {
+                console.log("에러발생", err);
+            }
+        });
+
+    }
+</script>
+</html>

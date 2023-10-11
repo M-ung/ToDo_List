@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Head content -->
+</head>
+<style>
+    .completed {
+        color: red;
+        /* Add any other styles you want to apply to completed todos */
+    }
+</style>
+<body>
+<a href="/member/logout">로그아웃</a>
+<a href="/member/update">회원수정</a>
+<form method="post" action="/addTodo">
+    <input type="text" name="todo" />
+    <input type="submit" value="Add todo" />
+</form>
+<hr>
+<ul>
+    <li th:each="todo : ${todos}" th:class="${todo.completed} ? 'completed' : ''">
+        <span th:text="${todo.todo}"></span>
+        <!-- delete 버튼을 만들고 id를 넘겨주는 형식 -->
+        <form th:action="@{/completed/{id}(id=${todo.id})}" method="post" style="display: inline;">
+            <input type="hidden" name="_method" value="COMPLETED" />
+            <button type="submit">Completed</button>
+        </form>
+        <form th:action="@{/delete/{id}(id=${todo.id})}" method="post" style="display: inline;">
+            <input type="hidden" name="_method" value="DELETE" />
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+</body>
+</html>
